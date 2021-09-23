@@ -25,9 +25,9 @@ import java.util.Arrays;
 @Slf4j
 public class Utils {
 
-    private static final String keyStorePath = "/Users/huseyn.pashayev/desktop/gpp.jks";
-    private static final String password = "Kap2019!?";
-    private static final String keyAlias = "gppKey";
+    private static final String keyStorePath = "yourKeystorePath";
+    private static final String password = "KeystorePath";
+    private static final String keyAlias = "keyAlias";
     private static final String algorithm = "SHA1WithRSA";
 
     public static KeyStore getKeyStore() {
