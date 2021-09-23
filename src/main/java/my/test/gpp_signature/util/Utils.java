@@ -33,9 +33,11 @@ public class Utils {
     public static KeyStore getKeyStore() {
         KeyStore keyStore = null;
         try {
+            log.debug(String.format("Loading keystore %s", keyStorePath));
             FileInputStream is = new FileInputStream(keyStorePath);
             keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(is, password.toCharArray());
+            log.debug("Keystore loaded");
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }
@@ -49,12 +51,16 @@ public class Utils {
         try {
             Security.addProvider(new BouncyCastleProvider());
 
+            log.debug(String.format("Getting %s chain and key from keystore",keyAlias));
+
             Certificate[] certChain = keystore.getCertificateChain(keyAlias);
 
+            log.debug("Chain obtained");
             Store certStore = new JcaCertStore(Arrays.asList(certChain));
 
             Certificate cert = keystore.getCertificate(keyAlias);
 
+            log.debug("Key obtained");
             ContentSigner signer = new JcaContentSignerBuilder(algorithm).setProvider("BC").
                     build((PrivateKey) (keystore.getKey(keyAlias, password.toCharArray())));
 
