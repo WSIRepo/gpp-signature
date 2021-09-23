@@ -1,5 +1,6 @@
-package my.test.gpp_signature.util;
+package az.komtec.gpp_signature.util;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.cert.jcajce.JcaCertStore;
 import org.bouncycastle.cms.CMSProcessableByteArray;
@@ -12,6 +13,7 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
 import org.bouncycastle.util.Store;
+import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
 import java.security.KeyStore;
@@ -23,18 +25,17 @@ import java.util.Arrays;
 
 
 @Slf4j
-public class Utils {
+@Component
+@RequiredArgsConstructor
+public class CryptographicUtils {
 
-    private static final String keyStorePath = "yourKeystorePath";
-    private static final String password = "KeystorePath";
-    private static final String keyAlias = "keyAlias";
-    private static final String algorithm = "SHA1WithRSA";
+    private final String algorithm = "SHA1WithRSA";
 
-    public static KeyStore getKeyStore() {
+    public KeyStore getKeyStore(String path,String password) {
         KeyStore keyStore = null;
         try {
-            log.debug(String.format("Loading keystore %s", keyStorePath));
-            FileInputStream is = new FileInputStream(keyStorePath);
+            log.debug(String.format("Loading keystore %s",path));
+            FileInputStream is = new FileInputStream(path);
             keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(is, password.toCharArray());
             log.debug("Keystore loaded");
@@ -45,24 +46,26 @@ public class Utils {
         return keyStore;
     }
 
-    public static CMSSignedDataGenerator getCMSDataGenerator(KeyStore keystore) throws Exception {
+    public CMSSignedDataGenerator getCMSDataGenerator(KeyStore keystore,
+                                                      String alias,
+                                                      String password) throws Exception {
 
         CMSSignedDataGenerator cmsSignedDataGenerator = null;
         try {
             Security.addProvider(new BouncyCastleProvider());
 
-            log.debug(String.format("Getting %s chain and key from keystore",keyAlias));
+            log.debug(String.format("Getting %s chain and key from keystore",alias));
 
-            Certificate[] certChain = keystore.getCertificateChain(keyAlias);
+            Certificate[] certChain = keystore.getCertificateChain(alias);
 
             log.debug("Chain obtained");
             Store certStore = new JcaCertStore(Arrays.asList(certChain));
 
-            Certificate cert = keystore.getCertificate(keyAlias);
+            Certificate cert = keystore.getCertificate(alias);
 
             log.debug("Key obtained");
             ContentSigner signer = new JcaContentSignerBuilder(algorithm).setProvider("BC").
-                    build((PrivateKey) (keystore.getKey(keyAlias, password.toCharArray())));
+                    build((PrivateKey) (keystore.getKey(alias, password.toCharArray())));
 
             cmsSignedDataGenerator = new CMSSignedDataGenerator();
 
@@ -77,7 +80,7 @@ public class Utils {
         return cmsSignedDataGenerator;
     }
 
-    public static byte[] getPKCS7Signature(byte[] content, final CMSSignedDataGenerator generator) throws Exception {
+    public byte[] getPKCS7Signature(byte[] content, final CMSSignedDataGenerator generator) throws Exception {
 
         CMSTypedData cmsData = new CMSProcessableByteArray(content);
         CMSSignedData signedData = generator.generate(cmsData, true);

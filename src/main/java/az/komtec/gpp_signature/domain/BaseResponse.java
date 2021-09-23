@@ -1,4 +1,4 @@
-package my.test.gpp_signature.domain;
+package az.komtec.gpp_signature.domain;
 
 import lombok.Data;
 

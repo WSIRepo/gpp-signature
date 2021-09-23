@@ -1,4 +1,4 @@
-package my.test.gpp_signature;
+package az.komtec.gpp_signature;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,8 +7,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class GppSignatureApplication {
     public static void main(String[] args) {
         SpringApplication.run(GppSignatureApplication.class);
-
-        System.out.println("Hello World");
-
     }
 }
