@@ -23,7 +23,7 @@ public class SignatureController {
 
     @PostMapping
     public BaseResponse getSignature(
-            BaseRequest request) {
+            @RequestBody BaseRequest request) {
         log.info(String.format("Sign request - %s", request.getGppJson()));
 
         BaseResponse response = new BaseResponse();

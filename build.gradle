@@ -4,8 +4,9 @@ plugins {
     id 'java'
 }
 
-group 'my.test.gpp_signature'
-version '1.0-SNAPSHOT'
+group  = 'az.komtec'
+version = '1.0-SNAPSHOT'
+sourceCompatibility = 11
 
 repositories {
     mavenCentral()
