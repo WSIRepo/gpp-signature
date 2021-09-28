@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.47'
+    implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.69'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

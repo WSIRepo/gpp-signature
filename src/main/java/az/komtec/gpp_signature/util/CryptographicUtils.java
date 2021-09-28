@@ -31,10 +31,10 @@ public class CryptographicUtils {
 
     private final String algorithm = "SHA1WithRSA";
 
-    public KeyStore getKeyStore(String path,String password) {
+    public KeyStore getKeyStore(String path, String password) {
         KeyStore keyStore = null;
         try {
-            log.debug(String.format("Loading keystore %s",path));
+            log.debug(String.format("Loading keystore %s", path));
             FileInputStream is = new FileInputStream(path);
             keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(is, password.toCharArray());
@@ -54,7 +54,7 @@ public class CryptographicUtils {
         try {
             Security.addProvider(new BouncyCastleProvider());
 
-            log.debug(String.format("Getting %s chain and key from keystore",alias));
+            log.debug(String.format("Getting %s chain and key from keystore", alias));
 
             Certificate[] certChain = keystore.getCertificateChain(alias);
 
@@ -83,7 +83,7 @@ public class CryptographicUtils {
     public byte[] getPKCS7Signature(byte[] content, final CMSSignedDataGenerator generator) throws Exception {
 
         CMSTypedData cmsData = new CMSProcessableByteArray(content);
-        CMSSignedData signedData = generator.generate(cmsData, true);
+        CMSSignedData signedData = generator.generate(cmsData);
         return signedData.getEncoded();
     }
 
