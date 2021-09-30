@@ -29,7 +29,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class CryptographicUtils {
 
-    private final String algorithm = "SHA1WithRSA";
+    private final String algorithm = "SHA256WithRSA";
 
     public KeyStore getKeyStore(String path, String password) {
         KeyStore keyStore = null;
@@ -69,10 +69,11 @@ public class CryptographicUtils {
 
             cmsSignedDataGenerator = new CMSSignedDataGenerator();
 
-            cmsSignedDataGenerator.addSignerInfoGenerator(new JcaSignerInfoGeneratorBuilder(new JcaDigestCalculatorProviderBuilder().setProvider("BC").
+            cmsSignedDataGenerator.addSignerInfoGenerator(new JcaSignerInfoGeneratorBuilder(
+                    new JcaDigestCalculatorProviderBuilder().setProvider("BC").
                     build()).build(signer, (X509Certificate) cert));
 
-            cmsSignedDataGenerator.addCertificates(certStore);
+            //cmsSignedDataGenerator.addCertificates(certStore);
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }
